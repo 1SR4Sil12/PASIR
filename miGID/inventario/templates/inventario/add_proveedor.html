@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Añadir Proveedor</title>
+    <style>
+        /* Reutiliza los estilos de tu página de filtro aquí */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding-top: 20px;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-group > div {
+            margin: 10px;
+        }
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }.back-button button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .back-button button:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Añadir Proveedor</h1>
+    <div class="form-container">
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+    <div class="form-container" style="text-align: center;">
+        <a href="{% url 'index' %}" class="back-button" style="text-decoration: none; display: inline-block; margin-bottom: 20px;">
+            <button type="button">Volver al Inicio</button>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

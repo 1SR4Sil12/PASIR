@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prueba</title>
+    <style>
+        @media (max-width: 600px){}
+        @media (min-width: 601px) and (max-width: 1024px){}
+        @media (min-width: 1025px){}
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding-top: 20px;
+        }
+        .filter-container {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filter-form > div {
+            margin: 10px;
+        }
+        .filter-form input,
+        .filter-form select {
+            padding: 10px;
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+        }
+        .filter-form button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .filter-form button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even){background-color: #f2f2f2;}
+        tr:hover {background-color: #ddd;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Filtrar Artículos</h1>
+    <div class="filter-container">
+        <form action="" method="post" class="filter-form">
+            {% csrf_token %}
+            <div>
+                <label for="proveedor">Proveedor:</label>
+                <select name="proveedor" id="proveedor">
+                    <option value="">Todos</option>
+                    {% for proveedor in proveedores %}
+                        <option value="{{ proveedor.id }}">{{ proveedor.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="precio_min">Precio Mín:</label>
+                <input type="number" id="precio_min" name="precio_minimo" placeholder="0">
+            </div>
+            <div>
+                <label for="precio_max">Precio Máx:</label>
+                <input type="number" id="precio_max" name="precio_maximo" placeholder="0">
+            </div>
+            <div>
+                <label for="sede">Sede:</label>
+                <select name="sede" id="sede">
+                    <option value="">Todas</option>
+                    {% for sede in sedes %}
+                        <option value="{{ sede.id }}">{{ sede.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="nombre_articulo">Nombre:</label>
+                <input type="text" id="nombre_articulo" name="nombre_articulo" placeholder="Nombre del Artículo">
+            </div>
+            <div>
+                <label for="fecha_stock">Fecha de Stock:</label>
+                <input type="date" id="fecha_stock" name="fecha_stock">
+            </div>
+            <div>
+                <button type="submit">Filtrar</button>
+            </div>
+        </form>
+    </div>
+
+    {% if articulos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Descripción</th>
+                <th>Proveedor</th>
+                <th>Sede</th>
+                <th>Fecha de Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for articulo in articulos %}
+            <tr>
+                <td>{{ articulo.nom }}</td>
+                <td>{{ articulo.pvp }}</td>
+                <td>{{ articulo.des }}</td>
+                <td>{{ articulo.proveedor.nom }}</td>
+                <td>{{ articulo.sede }}</td>
+                <td>{{ articulo.fecha_stock|date:"d-m-Y" }}</td>
+            </tr>
+            {% endfor %}
+    </table>
+    {% else %}
+    <p>No hay artículos que coincidan con los criterios de búsqueda.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

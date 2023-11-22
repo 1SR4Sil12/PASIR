@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bienvenido a Mi GID</title>
+    <style>
+        
+        .welcome-container {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-top: 50px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .welcome-container h1 {
+            margin-bottom: 20px;
+        }
+
+        .welcome-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            text-decoration: none;
+            margin-top: 20px;
+            margin-left: 20px;
+            border-radius: 5px;
+        }
+
+        .welcome-container a:hover {
+            background-color: #45a049;
+        }
+
+        .logout-section {
+        	position: absolute;
+        	top: 10px;
+        	right: 10px;
+        	background-color: #f4f4f4; /* Fondo del mensaje */
+        	padding: 10px;
+        	border-radius: 5px;
+        	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    	}
+
+    	.logout-section span {
+        	font-size: 1.1em; /* Tamaño de la fuente */
+    	}
+
+    	.logout-section a {
+        	color: #4CAF50; /* Color del enlace */
+        	text-decoration: none;
+        	font-weight: bold;
+    	}
+
+    	.logout-section a:hover {
+        	text-decoration: underline;
+    	}
+
+    </style>
+</head>
+<body>
+
+<div class="logout-section">
+    {% if user.is_authenticated %}
+        <span>{{ user.username|capfirst }} ¿quieres <a href="{% url 'logout' %}">cerrar sesión</a>?</span>
+    {% endif %}
+</div>
+
+<div class="container welcome-container">
+    <h1>Bienvenido a Mi GID</h1>
+    <p>Elige una opción:</p>
+    {% if perms.inventario.add_proveedores %}
+    	<a href="{% url 'add_proveedor' %}">Añadir Proveedor</a>
+	{% endif %}
+    {% if perms.inventario.add_sede %}
+    	<a href="{% url 'add_sede' %}">Añadir Sede</a>
+	{% endif %}
+	{% if perms.inventario.add_articulo %}
+    <a href="{% url 'add_articulo' %}">Añadir Artículo</a>
+    {% endif %}
+    <a href="{% url 'inventario' %}">Inventario</a>
+</div>
+
+</body>
+</html>

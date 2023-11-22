@@ -15,8 +15,29 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.contrib.auth.views import LogoutView
+
+from inventario.views import filtro, login_view, index, add_proveedor, add_sede, add_articulo, registro
+
+from django.conf.urls import handler403
+
+handler403 = 'inventario.views.error_view'
 
 urlpatterns = [
-	path("inventario/", include("inventario.urls")),
     path('admin/', admin.site.urls),
+
+    path('', index, name='index'),
+    path('inventario/', filtro, name='inventario'),
+
+    path('añadir-proveedor/', add_proveedor, name='add_proveedor'),
+    path('añadir-sede/', add_sede, name='add_sede'),
+    path('añadir-articulo/', add_articulo, name='add_articulo'),
+
+    path('registro/', registro, name='registro'),
+
+    path('login/', login_view, name='login'),
+
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]
+
+
