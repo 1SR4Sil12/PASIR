@@ -57,28 +57,40 @@
     	}
 
     </style>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
-<div class="logout-section">
-    {% if user.is_authenticated %}
-        <span>{{ user.username|capfirst }} ¿quieres <a href="{% url 'logout' %}">cerrar sesión</a>?</span>
-    {% endif %}
-</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">Mi GID</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión ({{ user.username|capfirst }})</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<div class="container welcome-container">
-    <h1>Bienvenido a Mi GID</h1>
-    <p>Elige una opción:</p>
-    {% if perms.inventario.add_proveedores %}
-    	<a href="{% url 'add_proveedor' %}">Añadir Proveedor</a>
-	{% endif %}
-    {% if perms.inventario.add_sede %}
-    	<a href="{% url 'add_sede' %}">Añadir Sede</a>
-	{% endif %}
-	{% if perms.inventario.add_articulo %}
-    <a href="{% url 'add_articulo' %}">Añadir Artículo</a>
-    {% endif %}
-    <a href="{% url 'inventario' %}">Inventario</a>
+<div class="container mt-4">
+    <h1 class="text-center">Bienvenido a Mi GID</h1>
+    <p class="text-center">Elige una opción:</p>
+    <div class="d-flex flex-wrap justify-content-center">
+        {% if perms.inventario.add_proveedores %}
+            <a href="{% url 'add_proveedor' %}" class="btn btn-success m-2">Añadir Proveedor</a>
+        {% endif %}
+        {% if perms.inventario.add_sede %}
+            <a href="{% url 'add_sede' %}" class="btn btn-success m-2">Añadir Sede</a>
+        {% endif %}
+        {% if perms.inventario.add_articulo %}
+            <a href="{% url 'add_articulo' %}" class="btn btn-success m-2">Añadir Artículo</a>
+        {% endif %}
+        <a href="{% url 'inventario' %}" class="btn btn-primary m-2">Inventario</a>
+    </div>
 </div>
 
 </body>

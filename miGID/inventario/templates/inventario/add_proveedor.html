@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Añadir Proveedor</title>
-    <style>
-        /* Reutiliza los estilos de tu página de filtro aquí */
+<style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -60,24 +57,29 @@
         }
 
     </style>
+<head>
+    <title>Añadir Proveedor</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>Añadir Proveedor</h1>
-    <div class="form-container">
-        <form method="post" class="form-group">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Guardar</button>
-        </form>
+<div class="container mt-4">
+    <h1 class="text-center">Añadir Proveedor</h1>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" class="form-group">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Guardar Proveedor</button>
+            </form>
+        </div>
     </div>
-    <div class="form-container" style="text-align: center;">
-        <a href="{% url 'index' %}" class="back-button" style="text-decoration: none; display: inline-block; margin-bottom: 20px;">
-            <button type="button">Volver al Inicio</button>
-        </a>
+
+    <div class="text-center mt-3">
+        <a href="{% url 'index' %}" class="btn btn-secondary">Volver al Inicio</a>
     </div>
 </div>
 
 </body>
 </html>
+

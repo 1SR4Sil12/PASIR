@@ -30,7 +30,7 @@ class ArticuloForm(ModelForm):
 
 # Vistas para creación
 
-@permission_required('app.add_proveedor', raise_exception=True)
+@permission_required('inventario.add_proveedores', raise_exception=True)
 @login_required
 def add_proveedor(request):
     if request.method == 'POST':
@@ -40,11 +40,11 @@ def add_proveedor(request):
             return redirect('index')
     else:
         form = ProveedorForm()
-    if not request.user.has_perm('app.add_proveedor'):
+    if not request.user.has_perm('inventario.add_proveedores'):
         raise PermissionDenied
     return render(request, 'inventario/add_proveedor.html', {'form': form})
 
-@permission_required('app.add_sede', raise_exception=True)
+@permission_required('inventario.add_sede', raise_exception=True)
 @login_required
 def add_sede(request):
     if request.method == 'POST':
@@ -54,11 +54,11 @@ def add_sede(request):
             return redirect('index')
     else:
         form = SedeForm()
-    if not request.user.has_perm('app.add_sede'):
+    if not request.user.has_perm('inventario.add_sede'):
         raise PermissionDenied
     return render(request, 'inventario/add_sede.html', {'form': form})
 
-@permission_required('app.add_articulo', raise_exception=True)
+@permission_required('inventario.add_articulo', raise_exception=True)
 @login_required
 def add_articulo(request):
     if request.method == 'POST':
@@ -68,7 +68,7 @@ def add_articulo(request):
             return redirect('index')
     else:
         form = ArticuloForm()
-    if not request.user.has_perm('app.add_articulo'):
+    if not request.user.has_perm('inventario.add_articulo'):
         raise PermissionDenied
     return render(request, 'inventario/add_articulo.html', {'form': form})
 
@@ -114,7 +114,7 @@ def index(request):
 @login_required
 def filtro(request):
     sedes = Sede.objects.all()
-    proveedores = Proveedores.objects.all()  # Obtener todos los proveedores
+    proveedores = Proveedores.objects.all()
     articulos = None
 
     if request.method == 'POST':
@@ -125,8 +125,10 @@ def filtro(request):
         precio_maximo = request.POST.get('precio_maximo')
         fecha_stock = request.POST.get('fecha_stock')
 
-        articulos = Articulo.objects.filter(sede_id=sede_id)
+        articulos = Articulo.objects.all()
 
+        if sede_id:
+            articulos = articulos.filter(sede_id=sede_id)
         if nombre_articulo:
             articulos = articulos.filter(nom__icontains=nombre_articulo)
         if proveedor_id:

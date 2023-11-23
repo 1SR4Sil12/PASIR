@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Prueba</title>
+    <title>Inventario</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <style>
         @media (max-width: 600px){}
         @media (min-width: 601px) and (max-width: 1024px){}
@@ -13,7 +16,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .container {
             width: 80%;
             margin: auto;
@@ -67,57 +70,76 @@
         }
         tr:nth-child(even){background-color: #f2f2f2;}
         tr:hover {background-color: #ddd;}
+
     </style>
+    
 </head>
 <body>
 
-<div class="container">
-    <h1>Filtrar Artículos</h1>
-    <div class="filter-container">
-        <form action="" method="post" class="filter-form">
-            {% csrf_token %}
-            <div>
-                <label for="proveedor">Proveedor:</label>
-                <select name="proveedor" id="proveedor">
-                    <option value="">Todos</option>
-                    {% for proveedor in proveedores %}
-                        <option value="{{ proveedor.id }}">{{ proveedor.nom }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="precio_min">Precio Mín:</label>
-                <input type="number" id="precio_min" name="precio_minimo" placeholder="0">
-            </div>
-            <div>
-                <label for="precio_max">Precio Máx:</label>
-                <input type="number" id="precio_max" name="precio_maximo" placeholder="0">
-            </div>
-            <div>
-                <label for="sede">Sede:</label>
-                <select name="sede" id="sede">
-                    <option value="">Todas</option>
-                    {% for sede in sedes %}
-                        <option value="{{ sede.id }}">{{ sede.nom }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="nombre_articulo">Nombre:</label>
-                <input type="text" id="nombre_articulo" name="nombre_articulo" placeholder="Nombre del Artículo">
-            </div>
-            <div>
-                <label for="fecha_stock">Fecha de Stock:</label>
-                <input type="date" id="fecha_stock" name="fecha_stock">
-            </div>
-            <div>
-                <button type="submit">Filtrar</button>
-            </div>
-        </form>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">Mi GID</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Volver</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Filtrar Artículos</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form action="" method="post" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-4">
+                    <label for="proveedor" class="form-label">Proveedor:</label>
+                    <select name="proveedor" id="proveedor" class="form-select">
+                        <option value="">Todos</option>
+                        {% for proveedor in proveedores %}
+                            <option value="{{ proveedor.id }}">{{ proveedor.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="precio_min" class="form-label">Precio Mín:</label>
+                    <input type="number" id="precio_min" name="precio_minimo" placeholder="0" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="precio_max" class="form-label">Precio Máx:</label>
+                    <input type="number" id="precio_max" name="precio_maximo" placeholder="0" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="sede" class="form-label">Sede:</label>
+                    <select name="sede" id="sede" class="form-select">
+                        <option value="">Todas</option>
+                        {% for sede in sedes %}
+                            <option value="{{ sede.id }}">{{ sede.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="nombre_articulo" class="form-label">Nombre:</label>
+                    <input type="text" id="nombre_articulo" name="nombre_articulo" placeholder="Nombre del Artículo" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="fecha_stock" class="form-label">Fecha de Stock:</label>
+                    <input type="date" id="fecha_stock" name="fecha_stock" class="form-control">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     {% if articulos %}
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -139,6 +161,7 @@
                 <td>{{ articulo.fecha_stock|date:"d-m-Y" }}</td>
             </tr>
             {% endfor %}
+        </tbody>
     </table>
     {% else %}
     <p>No hay artículos que coincidan con los criterios de búsqueda.</p>
