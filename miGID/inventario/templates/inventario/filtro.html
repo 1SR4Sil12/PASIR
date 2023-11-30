@@ -54,6 +54,9 @@
         .filter-form button:hover {
             background-color: #45a049;
         }
+        .btn {
+            margin-top: 15px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -72,6 +75,13 @@
         tr:hover {background-color: #ddd;}
 
     </style>
+
+    <script>
+        function confirmDelete() {
+            return confirm("¿Seguro que quieres borrar este artículo?");
+        }
+    </script>
+
     
 </head>
 <body>
@@ -106,6 +116,7 @@
                         {% endfor %}
                     </select>
                 </div>
+                
                 <div class="col-md-4">
                     <label for="precio_min" class="form-label">Precio Mín:</label>
                     <input type="number" id="precio_min" name="precio_minimo" placeholder="0" class="form-control">
@@ -131,6 +142,10 @@
                     <label for="fecha_stock" class="form-label">Fecha de Stock:</label>
                     <input type="date" id="fecha_stock" name="fecha_stock" class="form-control">
                 </div>
+                <div class="col-md-4">
+                    <label for="codigo_articulo" class="form-label">Código del Artículo:</label>
+                    <input type="text" id="codigo_articulo" name="codigo_articulo" placeholder="Código del Artículo" class="form-control">
+                </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Filtrar</button>
                 </div>
@@ -142,7 +157,9 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th></th>
                 <th>Nombre</th>
+                <th>Código</th>
                 <th>Precio</th>
                 <th>Descripción</th>
                 <th>Proveedor</th>
@@ -153,12 +170,24 @@
         <tbody>
             {% for articulo in articulos %}
             <tr>
+                <td>
+                    <a href="{% url 'crear_pedido' articulo.id %}" class="btn btn-primary btn-sm">Realizar Pedido</a>
+                </td>
                 <td>{{ articulo.nom }}</td>
+                <td>{{ articulo.cod }}</td>
                 <td>{{ articulo.pvp }}</td>
                 <td>{{ articulo.des }}</td>
                 <td>{{ articulo.proveedor.nom }}</td>
                 <td>{{ articulo.sede }}</td>
                 <td>{{ articulo.fecha_stock|date:"d-m-Y" }}</td>
+                {% if perms.inventario.delete_articulo %}
+                <td>
+                        <form action="{% url 'delete_articulo' articulo.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmDelete()">🗑️</button>
+                        </form>
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth.views import LogoutView
 
-from inventario.views import filtro, login_view, index, add_proveedor, add_sede, add_articulo, registro
+from inventario.views import filtro, login_view, index, add_proveedor, add_sede, add_articulo, delete_articulo, crear_pedido, mis_pedidos, eliminar_pedido, registro
 
 from django.conf.urls import handler403
 
@@ -32,6 +32,12 @@ urlpatterns = [
     path('añadir-proveedor/', add_proveedor, name='add_proveedor'),
     path('añadir-sede/', add_sede, name='add_sede'),
     path('añadir-articulo/', add_articulo, name='add_articulo'),
+
+    path('pedido/crear/<int:articulo_id>/', crear_pedido, name='crear_pedido'),
+    path('mis_pedidos/', mis_pedidos, name='mis_pedidos'),
+	path('pedido/eliminar/<int:pedido_id>/', eliminar_pedido, name='eliminar_pedido'),
+
+    path('borrar-articulo/<int:id>/', delete_articulo, name='delete_articulo'),
 
     path('registro/', registro, name='registro'),
 

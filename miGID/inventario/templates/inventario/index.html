@@ -67,6 +67,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
+                	<li class="nav-item">
+                        <a class="nav-link" href="{% url 'mis_pedidos' %}">Mis Pedidos</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión ({{ user.username|capfirst }})</a>
                     </li>
@@ -90,6 +93,11 @@
             <a href="{% url 'add_articulo' %}" class="btn btn-success m-2">Añadir Artículo</a>
         {% endif %}
         <a href="{% url 'inventario' %}" class="btn btn-primary m-2">Inventario</a>
+        {% if user.is_authenticated %}
+        	{% for articulo in articulos %}
+    			<a href="{% url 'crear_pedido' articulo.id %}" class="btn btn-success m-2">Realizar Pedido</a>
+			{% endfor %}
+    	{% endif %}
     </div>
 </div>
 

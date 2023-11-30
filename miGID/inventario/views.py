@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from inventario.models import Articulo, Sede, Proveedores
+from inventario.models import Articulo, Sede, Proveedores, Pedido
 from django.forms import ModelForm
 from django.http import HttpResponse
 
@@ -27,6 +27,11 @@ class ArticuloForm(ModelForm):
     class Meta:
         model = Articulo
         fields = ['sede', 'proveedor', 'nom', 'cod', 'fecha_stock', 'des', 'pvp']
+
+class PedidoForm(ModelForm):
+    class Meta:
+        model = Pedido
+        fields = ['articulo', 'cantidad']
 
 # Vistas para creación
 
@@ -71,6 +76,48 @@ def add_articulo(request):
     if not request.user.has_perm('inventario.add_articulo'):
         raise PermissionDenied
     return render(request, 'inventario/add_articulo.html', {'form': form})
+
+# Vista para Pedidos
+
+@login_required
+def crear_pedido(request, articulo_id):
+    articulo = get_object_or_404(Articulo, id=articulo_id)
+    if request.method == 'POST':
+        form = PedidoForm(request.POST)
+        if form.is_valid():
+            pedido = form.save(commit=False)
+            pedido.usuario = request.user
+            pedido.articulo = articulo
+            pedido.save()
+            return redirect('index')
+    else:
+        form = PedidoForm()
+
+    return render(request, 'inventario/pedido.html', {'form': form, 'articulo': articulo})
+
+def mis_pedidos(request):
+    if request.user.is_authenticated:
+        pedidos = Pedido.objects.filter(usuario=request.user)
+        return render(request, 'inventario/mis_pedidos.html', {'pedidos': pedidos})
+
+def eliminar_pedido(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id, usuario=request.user)
+    if request.method == 'POST':
+        pedido.delete()
+        return redirect('mis_pedidos')
+    return render(request, 'confirmar_eliminacion.html', {'pedido': pedido})
+
+# Vista eliminar articulos
+
+@login_required
+@permission_required('inventario.delete_articulo', raise_exception=True)
+def delete_articulo(request, id):
+    articulo = get_object_or_404(Articulo, id=id)
+    if request.method == "POST":
+        articulo.delete()
+        return redirect('inventario')
+    else:
+        return redirect('inventario')
 
 # Vista error
 
@@ -124,6 +171,7 @@ def filtro(request):
         precio_minimo = request.POST.get('precio_minimo')
         precio_maximo = request.POST.get('precio_maximo')
         fecha_stock = request.POST.get('fecha_stock')
+        codigo_articulo = request.POST.get('codigo_articulo')
 
         articulos = Articulo.objects.all()
 
@@ -139,5 +187,7 @@ def filtro(request):
             articulos = articulos.filter(pvp__lte=precio_maximo)
         if fecha_stock:
             articulos = articulos.filter(fecha_stock__date=fecha_stock)
+        if codigo_articulo:
+            articulos = articulos.filter(cod__icontains=codigo_articulo)
 
     return render(request, 'inventario/filtro.html', {'sedes': sedes, 'proveedores': proveedores, 'articulos': articulos})

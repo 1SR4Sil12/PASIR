@@ -1,0 +1,13 @@
+<!-- crear_pedido.html -->
+<h2>Confirmar Pedido</h2>
+<p>Artículo: {{ articulo.nom }}</p>
+<p>Precio: {{ articulo.pvp }}</p>
+<!-- Más detalles del artículo si es necesario -->
+
+<input type="number" name="cantidad" min="1" value="1">
+
+<form action="{% url 'crear_pedido' articulo.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Confirmar Pedido</button>
+</form>
+

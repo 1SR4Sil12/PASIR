@@ -19,7 +19,6 @@ class Proveedores(models.Model):
 	def __str__(self):
 		return f'{self.nom}'
 
-
 class Articulo(models.Model):
 	sede = models.ForeignKey(Sede, on_delete=models.CASCADE)
 	proveedor = models.ForeignKey(Proveedores, on_delete=models.SET_NULL, null=True)
@@ -35,6 +34,11 @@ class Articulo(models.Model):
 	class Meta:
 		verbose_name_plural = "Artículos"
 
+class Pedido(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    articulo = models.ForeignKey(Articulo, on_delete=models.SET_NULL, null=True)
+    cantidad = models.PositiveIntegerField(default=1)
+    fecha_pedido = models.DateTimeField(auto_now_add=True)
 
 class Perfil(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, default=0)
